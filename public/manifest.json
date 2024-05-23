@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "Title Fetcher By Sanket Jambhulkar",
+    "version": "1.0",
+    "description": "Fetch and display the title of the current tab using React, Vite, TypeScript, and Tailwind CSS",
+    "permissions": [
+      "activeTab"
+    ],
+    "action": {
+      "default_popup": "index.html",
+      "default_icon": {
+        "16": "icon16.png",
+        "48": "icon48.png",
+        "144": "icon128.png"
+      }
+    }
+  }
+  
