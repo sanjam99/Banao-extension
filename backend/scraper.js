@@ -8,8 +8,8 @@ const scrapeLinkedInProfile = async (url) => {
 
         // Login to LinkedIn
         await page.goto('https://www.linkedin.com/login', { waitUntil: 'networkidle2' });
-        await page.type('input#username', 'sanketjam@protonmail.com');
-        await page.type('input#password', 'Sanjam99');
+        await page.type('input#username', 'your email');
+        await page.type('input#password', 'your password');
         await page.click('.btn__primary--large.from__button--floating');
         await page.waitForNavigation();
 
