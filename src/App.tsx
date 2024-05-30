@@ -1,34 +1,56 @@
-import { useState } from 'react';
-import './App.css'
+import React, { useState } from 'react';
+import axios from 'axios';
+import Example from './components/loader';
 
-function App(){
-  const [title, setTitle] = useState<string>('');
+const App: React.FC = () => {
+    const [links, setLinks] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchTitle = () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]) {
-        const currentTab = tabs[0];
-        setTitle(currentTab.title || 'No title');
-      }
-    });
-  };
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+        setLoading(true);
+        const linkArray = links.split('\n').map(link => link.trim());
+        try {
+            for (const link of linkArray) {
+                await axios.post('http://localhost:3000/api/scrape', { url: link });
+            }
+            alert('Profiles scraped successfully');
+        } catch (error) {
+            console.error('Error scraping profiles:', error);
+            alert('There was an error scraping the profiles.');
+        }
+        setLoading(false);
+    };
 
-  return (
-    <div className="p-4">
-      <h1 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Tab Title Fetcher by Sanket Jambhulkar</h1>
-      <div className="container flex items-center justify-between px-6 py-3 mx-auto">
-            <a href="#">
-            <img className="w-full h-full max-w-md" src="https://merakiui.com/images/components/Email-campaign-bro.svg" alt="email illustration vector art"></img>
-            </a>
+    if (loading) {
+        return (<div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">
+        <h1 className="text-3xl font-bold mb-6">LinkedIn Profile Scraper</h1>
+        <Example />;
+        </div>)
+    }
+
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-black text-white p-4">
+            <h1 className="text-3xl font-bold mb-6">LinkedIn Profile Scraper</h1>
+            <form onSubmit={handleSubmit} className="w-full max-w-lg bg-gray-800 shadow-md rounded-lg p-6">
+                <textarea
+                    rows={10}
+                    cols={50}
+                    value={links}
+                    onChange={(e) => setLinks(e.target.value)}
+                    placeholder="Enter LinkedIn profile links, one per line"
+                    className="w-full p-2 border border-gray-600 rounded-lg mb-4 bg-black text-white"
+                />
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="rounded-2xl border-2 border-dashed border-white bg-black px-6 py-3 font-semibold uppercase text-white transition-all duration-300 hover:translate-x-[-4px] hover:translate-y-[-4px] hover:rounded-md hover:shadow-[4px_4px_0px_white] active:translate-x-[0px] active:translate-y-[0px] active:rounded-2xl active:shadow-none"
+                >
+                    Submit
+                </button>
+            </form>
         </div>
-      <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800" onClick={fetchTitle}>
-        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-        Fetch Tab Title
-        </span>
-      </button>
-      <p className="text-blue-400 text-xl">{title}</p>
-    </div>
-  );
+    );
 };
 
-export default App
+export default App;
