@@ -22,8 +22,8 @@ const scrapeLinkedInProfile = async (url) => {
                 const name = document.querySelector('.text-heading-xlarge.inline.t-24.v-align-middle.break-words')?.textContent || '';
                 const location = document.querySelector('.text-body-small.inline.t-black--light.break-words')?.textContent.trim() || '';
                 const about = document.querySelector('div.full-width.t-14.t-normal.t-black.display-flex.align-items-center span[aria-hidden="true"]')?.innerText.trim() || '';
-                const bio = document.querySelector('.text-body-medium.break-words[data-generated-suggestion-target="urn:li:fsu_profileActionDelegate:-71558079"]')?.textContent.trim() || '';
-                const bioLine = document.querySelector('.text-body-medium.break-words[data-generated-suggestion-target="urn:li:fsu_profileActionDelegate:-71558079"]')?.textContent.trim() || '';
+                const bio = document.querySelector("div.text-body-medium.break-words")?.innerHTML.replace(/^\s+|\s+$/g, '') || '';
+                const bioLine = document.querySelector("div.text-body-medium.break-words")?.innerHTML.replace(/^\s+|\s+$/g, '') || '';
                 const followerCount = document.querySelector('p.text-body-small span[aria-hidden="true"]')?.innerText || '';
                 const connectionCount = document.querySelector('ul li.text-body-small span')?.textContent.trim() || '';
             if(followerCount != null & connectionCount != null){
